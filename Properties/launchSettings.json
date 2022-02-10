@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TestAuditTrail": {
+      "commandName": "Project",
+      "hotReloadEnabled": false
+    }
+  }
+}
