@@ -1,2 +1,2 @@
-# ProofOfConcepts
-Small sample projects used to learn concepts with.
+# EF Core 6 Audit Logging
+
