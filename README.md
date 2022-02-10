@@ -8,7 +8,7 @@ A small project used to learn how to accomplish:
   
 
 While researching how to get EF Core 6 to work with the new .NET 6 DateOnly & TimeOnly types. I 
-came across this great .NET Utility repository [TinyHelpers](https://github.com/marcominerva/TinyHelpers/tree/master/src/TinyHelpers.EntityFrameworkCore).
+came across this great .NET Utility [TinyHelpers](https://github.com/marcominerva/TinyHelpers/tree/master/src/TinyHelpers.EntityFrameworkCore).
 Thank you [Marco Minerva]https://github.com/marcominerva for sharing this great libary!
   
   
