@@ -31,8 +31,7 @@ public class AppDbContext : AuditableContext
         var DbPath = System.IO.Path.Join(path, "AuditTrail.db");
 
         optionsBuilder.UseSqlite($"Data Source={DbPath}");
-        //optionsBuilder.UseSqlServer("Server=GREGS-SP; Database=AuditTrailTest; Trusted_Connection=True; MultipleActiveResultSets=true");
-        //   .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
+        //.LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
         base.OnConfiguring(optionsBuilder);
     }
 }
