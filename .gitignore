@@ -1,0 +1,13 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/TestAuditTrail.Console/bin/Debug/net6.0
+/TestAuditTrail.Console/obj
+/TestAuditTrail.EntityFrameworkCoreHelpers/bin/Debug/net6.0
+/TestAuditTrail.EntityFrameworkCoreHelpers/obj
+/TestAuditTrail.Shared/bin/Debug/net6.0
+/TestAuditTrail.Shared/obj
+/.vs/EFCoreAuditTrail/v17
+/.vs/AuditTrailTests/v17
+/.vs/ProjectSettings.json

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Comparers\StringArrayComparer.cs" />
+    <Compile Remove="Converters\StringArrayConverter.cs" />
+    <Compile Remove="Converters\StringEmptyToNullConverter.cs" />
+    <Compile Remove="Converters\StringEmptyToNullTrimConverter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TestAuditTrail.Shared\TestAuditTrail.JsonUtilities.csproj" />
+  </ItemGroup>
+
+</Project>
