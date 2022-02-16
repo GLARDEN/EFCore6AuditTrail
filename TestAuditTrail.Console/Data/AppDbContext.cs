@@ -29,8 +29,7 @@ public class AppDbContext : AuditableContext
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);
         var DbPath = System.IO.Path.Join(path, "AuditTrail.db");
-
-        optionsBuilder.UseSqlite($"Data Source={DbPath}");
+         optionsBuilder.UseSqlite($"Data Source={DbPath}");        
         //.LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
         base.OnConfiguring(optionsBuilder);
     }

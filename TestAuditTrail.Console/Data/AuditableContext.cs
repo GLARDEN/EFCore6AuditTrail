@@ -10,22 +10,14 @@ public abstract class AuditableContext : DbContext
     private JsonSerializerOptions jsonSerializerOptions { get; set; }
     protected AuditableContext() : base()    {    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        
-        //modelBuilder.ApplyConfigurationsFromAssembly(typeof(AuditableContext).Assembly);
-
-        //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    {        
         base.OnModelCreating(modelBuilder);
-
     }
 
     public DbSet<AuditEntry> AuditTrails { get; set; }
 
     public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
-        ChangeTracker.DetectChanges();
-       
-
         var auditEntries = OnBeforeSaveChanges();
         var result = await base.SaveChangesAsync(cancellationToken);
         await OnAfterSaveChangesAsync(auditEntries);

@@ -8,14 +8,9 @@ using TestAuditTrail.EntityFrameworkCore.Shared.Extensions;
 namespace TestAuditTrail;
 public class TestConfiguration : IEntityTypeConfiguration<Test>
 {
-    public TestConfiguration()
-    {
-       
-    }
+    public TestConfiguration() {}
     public void Configure(EntityTypeBuilder<Test> builder)
     {
-        
-
         builder.ToTable("Tests").HasKey(k => k.Id);
         builder.Property(p => p.Id).ValueGeneratedNever();
 
