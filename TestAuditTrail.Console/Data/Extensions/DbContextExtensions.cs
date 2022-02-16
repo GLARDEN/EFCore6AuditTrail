@@ -76,14 +76,14 @@ public static class DbContextExtensions
         var propertiesToIgnore = typeof(BaseEntity).GetProperties().Select(p => p.Name);
 
         var addedOwnedTypes = dbContext.ChangeTracker.Entries()
-                        .Where(
-                   e => e.Metadata.IsOwned() &&
-                       e.Metadata.ClrType.BaseType == typeof(ValueObject) &&
-                       e.State == EntityState.Added).ToList();
+                            .Where(
+                                e => e.Metadata.IsOwned() &&
+                                e.Metadata.ClrType.BaseType == typeof(ValueObject) &&
+                                e.State == EntityState.Added).ToList();
 
         var deletedOwnedTypes = dbContext.ChangeTracker.Entries()
-                                     .Where(
-                                e => e.Metadata.IsOwned() &&
+                                .Where(
+                                    e => e.Metadata.IsOwned() &&
                                     e.Metadata.ClrType.BaseType == typeof(ValueObject) &&
                                     e.State == EntityState.Deleted).ToList();
 
@@ -104,7 +104,7 @@ public static class DbContextExtensions
                                                                && !propertiesToIgnore.Contains(p.Metadata.Name))
                                                      .Select(p =>
                                                            new PropertyChange()
-                                                           {    
+                                                           {
                                                                PropertyName = p.Metadata.Name ?? "",
                                                                OriginalValue =    p.OriginalValue ?? "",
                                                                CurrentValue= p.CurrentValue ?? ""
@@ -115,9 +115,9 @@ public static class DbContextExtensions
                     TempProperties = entry.Properties.Where(p => p.IsTemporary).ToList()
                 };
 
-                List<PropertyChange> ownedTypeChanges = ProcessOwnedTypes(dbContext,entry,addedOwnedTypes,deletedOwnedTypes);
+                List<PropertyChange> ownedTypeChanges = ProcessOwnedTypes(dbContext, entry, addedOwnedTypes, deletedOwnedTypes);
                 auditEntry.PropertyChanges.AddRange(ownedTypeChanges);
-                                                                                                          
+
                 entries.Add(auditEntry);
             }
         }
@@ -132,7 +132,7 @@ public static class DbContextExtensions
     /// <param name="addedOwnedTypes"></param>
     /// <param name="deletedOwnedTypes"></param>
     /// <returns></returns>
-    internal static List<PropertyChange> ProcessOwnedTypes(DbContext dbContext, EntityEntry<IAuditable> entry, List<EntityEntry> addedOwnedTypes, List<EntityEntry> deletedOwnedTypes) 
+    internal static List<PropertyChange> ProcessOwnedTypes(DbContext dbContext, EntityEntry<IAuditable> entry, List<EntityEntry> addedOwnedTypes, List<EntityEntry> deletedOwnedTypes)
     {
         List<PropertyChange> ownedTypeChanges = new();
         switch (entry.State)
@@ -158,7 +158,7 @@ public static class DbContextExtensions
     /// <param name="ownedTypes"></param>
     /// <param name="entry"></param>
     /// <returns></returns>
-    internal static List<PropertyChange> BuildAuditTrailForAddedOrDeletedEntry(DbContext dbContext,List<EntityEntry> ownedTypes, EntityEntry<IAuditable> entry)
+    internal static List<PropertyChange> BuildAuditTrailForAddedOrDeletedEntry(DbContext dbContext, List<EntityEntry> ownedTypes, EntityEntry<IAuditable> entry)
     {
         //if entry is not modified just return from the method
         if (!entry.IsAdded() && !entry.IsDeleted())
@@ -180,7 +180,7 @@ public static class DbContextExtensions
                 ownedType.Properties.Where(p => !p.Metadata.IsKey()).ToList().ForEach(p =>
                 {
                     ownedTypePropertyPath = GetOwnedTypeParentPropertyName(ownedType, p);
-                    
+
                     object? originalValue = null;
                     object? currentValue = null;
 
@@ -190,11 +190,11 @@ public static class DbContextExtensions
                         currentValue = null;
                     }
 
-                    if( entry.State == EntityState.Added)
+                    if (entry.State == EntityState.Added)
                     {
                         originalValue =null;
                         currentValue = p.CurrentValue;
-                    }                      
+                    }
 
                     ownedTypeChanges.Add(new PropertyChange()
                     {
@@ -229,7 +229,7 @@ public static class DbContextExtensions
         foreach (var deletedOwnedType in deletedOwnedTypes)
         {
             var parent = GetOwnedTypeParentEntity(dbContext, deletedOwnedType);
-           
+
             if (parent != null && parent.Equals(entry.Entity))
             {
                 //Get the added value object that matches the deleted value object
@@ -248,7 +248,7 @@ public static class DbContextExtensions
 
                     if (entry.IsModified() && !deletedProperty.OriginalValue.Equals(p.CurrentValue))
                     {
-                        var ownedTypePropertyPath = GetOwnedTypeParentPropertyName(addedOwnedType, deletedProperty);                        
+                        var ownedTypePropertyPath = GetOwnedTypeParentPropertyName(addedOwnedType, deletedProperty);
                         ownedTypeChanges.Add(new PropertyChange()
                         {
                             PropertyName  = ownedTypePropertyPath ?? "",
@@ -256,7 +256,7 @@ public static class DbContextExtensions
                             CurrentValue  =  p.CurrentValue  ?? ""
                         });
                     }
-                });                           
+                });
             }
         }
         return ownedTypeChanges;
