@@ -228,27 +228,22 @@ public static class DbContextExtensions
 
         foreach (var deletedOwnedType in deletedOwnedTypes)
         {
-            var parent = GetOwnedTypeParentEntity(dbContext, deletedOwnedType);
+            var deletedOwnedTypeParent = GetOwnedTypeParentEntity(dbContext, deletedOwnedType);
 
-            if (parent != null && parent.Equals(entry.Entity))
+            if (deletedOwnedTypeParent != null && deletedOwnedTypeParent.Equals(entry.Entity))
             {
                 //Get the added value object that matches the deleted value object
-                var addedOwnedType = addedOwnedTypes.FirstOrDefault(a =>
-                {
-                    var addedFks = a.Metadata.GetForeignKeys();
-                    var deletedFks = deletedOwnedType.Metadata.GetForeignKeys();
-                    var nameMatch = a.Metadata.Name.Equals(deletedOwnedType.Metadata.Name);
-                    return deletedFks.Equals(addedFks) && nameMatch;
-                });
+                //var addedOwnedType = addedOwnedTypes.FirstOrDefault(a =>
 
+                var associatedAddedOwnedType = GetAssociatedAddedOwnedType(dbContext, deletedOwnedTypeParent, deletedOwnedType, addedOwnedTypes);
                 //Reiterate over added ownedTypes to create list of the changed values
-                addedOwnedType.Properties.Where(p => !p.Metadata.IsKey()).ToList().ForEach(p =>
+                associatedAddedOwnedType.Properties.Where(p => !p.Metadata.IsKey()).ToList().ForEach(p =>
                 {
                     var deletedProperty = deletedOwnedType.Properties.First(dp => dp.Metadata.Name == p.Metadata.Name);
 
                     if (entry.IsModified() && !deletedProperty.OriginalValue.Equals(p.CurrentValue))
                     {
-                        var ownedTypePropertyPath = GetOwnedTypeParentPropertyName(addedOwnedType, deletedProperty);
+                        var ownedTypePropertyPath = GetOwnedTypeParentPropertyName(associatedAddedOwnedType, deletedProperty);
                         ownedTypeChanges.Add(new PropertyChange()
                         {
                             PropertyName  = ownedTypePropertyPath ?? "",
@@ -262,7 +257,55 @@ public static class DbContextExtensions
         return ownedTypeChanges;
     }
 
+    /// <summary>
+    /// Gets the associated added owned type for the deleted owned type
+    /// </summary>
+    /// <param name="dbContext"></param>
+    /// <param name="deletedOwnedTypeParent"></param>
+    /// <param name="deletedOwnedType"></param>
+    /// <param name="addedOwnedTypes"></param>
+    /// <returns></returns>
+    internal static EntityEntry GetAssociatedAddedOwnedType(DbContext dbContext,object? deletedOwnedTypeParent, EntityEntry deletedOwnedType, List<EntityEntry> addedOwnedTypes) 
+    {
+        EntityEntry addedOwnedType = null;
+        for (var idx = 0; idx < addedOwnedTypes.Count; idx++)
+        {
+            addedOwnedType = addedOwnedTypes[idx];
 
+            var ownedTypeMatches = AddedOwnedTypeMatch(dbContext, deletedOwnedTypeParent, addedOwnedType, deletedOwnedType);
+
+            if (ownedTypeMatches)
+            {
+                return addedOwnedType;                
+            }
+        };
+
+        return null;
+    }
+
+    /// <summary>
+    /// Checks the owned types parents and name to make sure the deleted and added types are associated
+    /// </summary>
+    /// <param name="dbContext"></param>
+    /// <param name="deletedOwnedTypeParent"></param>
+    /// <param name="addedOwnedType"></param>
+    /// <param name="deletedOwnedType"></param>
+    /// <returns></returns>
+    internal static bool AddedOwnedTypeMatch(DbContext dbContext,object? deletedOwnedTypeParent, EntityEntry addedOwnedType, EntityEntry deletedOwnedType)
+    {
+        var addedOwnedTypeParent = GetOwnedTypeParentEntity(dbContext,  addedOwnedType );     
+        var parentsMatch = deletedOwnedTypeParent.Equals(addedOwnedTypeParent);
+        var nameMatch = addedOwnedType.Metadata.Name.Equals(deletedOwnedType.Metadata.Name);
+
+        return parentsMatch &&  nameMatch;
+    }
+
+    /// <summary>
+    /// Gets the parent entity for the requested owned type
+    /// </summary>
+    /// <param name="dbContext"></param>
+    /// <param name="ownedType"></param>
+    /// <returns></returns>
     internal static object? GetOwnedTypeParentEntity(DbContext dbContext, EntityEntry ownedType)
     {
         var ownership = ownedType.Metadata.FindOwnership();

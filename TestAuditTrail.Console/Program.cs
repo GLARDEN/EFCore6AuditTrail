@@ -78,7 +78,7 @@ void UpdateEntity(AppDbContext dbContext)
 void DeleteEntity(AppDbContext dbContext)
 {
 
-    var deletedEntity = dbContext.Tests.OrderBy(p => p.CreatedWhen).LastOrDefault();
+    var deletedEntity = dbContext.Tests.OrderByDescending(p => p.CreatedWhen).LastOrDefault();
     if (deletedEntity != null)
     {
         dbContext.Remove(deletedEntity);
@@ -93,7 +93,7 @@ void OutputAuditTrail(AppDbContext dbContext)
 
     auditTrail.ToList().ForEach(auditEntry =>
     {
-        Console.WriteLine($"\n\nId: {auditEntry.Id} Name: {auditEntry.EntityName}\nActionType: {auditEntry.ActionType}");
+        Console.WriteLine($"\n\nEntity Id: {auditEntry.EntityId} \nName: {auditEntry.EntityName}\nActionType: {auditEntry.ActionType}");
         auditEntry.PropertyChanges.ToList().ForEach(p => {
             Console.WriteLine($"\n\tProperty Name: {p.PropertyName}");
             Console.WriteLine($"\tOriginal Value: {p.OriginalValue}");
