@@ -7,7 +7,7 @@ A small project used to learn how to accomplish:
 <li>Persisting the new DateOnly & TimeOnly types using EF  
   
 # To Dos
-Need to update audit logging to handle a property that is a list of owned types current it will only handle as a property that is singular owned type
+Need to update audit logging to handle a property that is a list of owned types currently it will only handle as a property that is a singular owned type
   
 # Kudos  
 While researching how to get EF Core 6 to work with the new .NET 6 DateOnly & TimeOnly types. I 
