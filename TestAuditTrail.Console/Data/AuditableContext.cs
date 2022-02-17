@@ -7,7 +7,7 @@ namespace TestAuditTrail;
 
 public abstract class AuditableContext : DbContext
 {
-    private JsonSerializerOptions jsonSerializerOptions { get; set; }
+    
     protected AuditableContext() : base()    {    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {        
