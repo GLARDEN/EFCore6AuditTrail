@@ -2,6 +2,8 @@
 
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+using TestAuditTrail.JsonUtilities;
+
 namespace TestAuditTrail.EntityFrameworkCore.Shared.Converters;
 
 public class JsonStringConverter<T> : ValueConverter<T?, string>

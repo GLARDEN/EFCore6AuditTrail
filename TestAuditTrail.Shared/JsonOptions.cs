@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 
 using TestAuditTrail.Shared.Json.Serialization;
 
-namespace TestAuditTrail.Json.Shared;
+namespace TestAuditTrail.JsonUtilities;
 
-internal class JsonOptions
+public class JsonOptions
 {
     public static JsonSerializerOptions Default { get; }
 

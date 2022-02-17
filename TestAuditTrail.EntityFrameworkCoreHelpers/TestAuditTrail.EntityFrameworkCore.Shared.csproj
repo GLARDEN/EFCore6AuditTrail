@@ -11,6 +11,7 @@
     <Compile Remove="Converters\StringArrayConverter.cs" />
     <Compile Remove="Converters\StringEmptyToNullConverter.cs" />
     <Compile Remove="Converters\StringEmptyToNullTrimConverter.cs" />
+    <Compile Remove="JsonOptions.cs" />
   </ItemGroup>
 
   <ItemGroup>
